@@ -190,7 +190,7 @@ export class EvalTabComponent implements OnInit, OnChanges {
               this.changeDetectorRef.detectChanges();
             }
           });
-      ;
+
     }
   }
 
