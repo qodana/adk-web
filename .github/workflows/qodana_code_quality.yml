@@ -1,0 +1,48 @@
+#-------------------------------------------------------------------------------#
+#        Discover additional configuration options in our documentation         #
+#               https://www.jetbrains.com/help/qodana/github.html               #
+#-------------------------------------------------------------------------------#
+
+name: Qodana
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+      - releases/*
+
+jobs:
+  qodana:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - name: Set up Node.js (Latest LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*' # Use the latest LTS version
+          cache: 'npm' # Enable caching of npm dependencies
+      - name: Generate coverage report
+        run: |
+          npm ci
+          npm run test -- --no-watch --no-progress --browsers=ChromeHeadlessCI --code-coverage
+          mkdir -p .qodana/code-coverage
+          # IMPORTANT: keep .qodana/code-coverage in .gitignore
+          mv coverage/adk-web/lcov.info .qodana/code-coverage
+          rm -rf coverage
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2025.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          # it's better to disable PR mode on the first run
+          pr-mode: false
+          push-fixes: branch
+          upload-result: true

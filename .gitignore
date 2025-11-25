@@ -37,3 +37,6 @@ adk-env/
 adk-samples/
 
 venv/
+
+# to store qodana-related artifacts
+.qodana/code-coverage

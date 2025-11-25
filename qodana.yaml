@@ -1,0 +1,26 @@
+version: 1.0
+
+# used to setup project for analysis: pull dependencies, generate coverage reports or code
+bootstrap: npm ci
+
+linter: qodana-js
+
+profile:
+  name: qodana.recommended
+
+# see the license issues as problems (useful for failThreshold)
+raiseLicenseProblems: true
+
+failureConditions:
+  # fail the analysis if at least 10 problems are rised OR if at least 1 critical problem is rised
+  severityThresholds:
+    any: 10
+    critical: 1
+  testCoverageThresholds:
+    # fail the analysis if coverage of new code is less than 40% (see prMode: true)
+    fresh: 40
+    # fail the analysis if total coverage is less than 40%
+    total: 40
+
+# enable automatic fixes not requiring review. See `apply` option for more sophisticated fixes
+fixesStrategy: cleanup
