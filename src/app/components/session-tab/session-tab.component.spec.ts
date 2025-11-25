@@ -247,7 +247,7 @@ describe('SessionTabComponent', () => {
           beforeEach(fakeAsync(() => {
             mockUiStateService.isSessionListLoadingResponse.next(false);
             fixture.detectChanges();
-            ;
+
           }));
 
           it(

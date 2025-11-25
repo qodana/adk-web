@@ -69,15 +69,15 @@ export class TraceService implements TraceServiceInterface {
             if (!hasEvent) {
                 messageIndices.push(index)
                 index++
-                continue
+
             } else {
                 if (attributes['gcp.vertex.agent.event_id'] == msg.eventId) {
                     messageIndices.push(index)
                     index++
-                    continue
+
                 } else {
                     index++
-                    continue
+
                 }
             }
         }
